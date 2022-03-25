@@ -1,6 +1,6 @@
 import express from 'express'
-import { handleErrors } from './src/middleware/handleError.js'
-import allRoutes from './src/routes'
+import { handleErrors } from './middleware/handleError.js'
+import allRoutes from './routes'
 const app = express()
 
 // settings
