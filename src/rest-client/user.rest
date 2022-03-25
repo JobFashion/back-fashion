@@ -1,0 +1,48 @@
+
+//CREATE USER
+
+POST http://localhost:8000/api/v1/auth/register
+content-type: application/json
+
+{
+  "name": "holahola",
+  "email": "hola@gmail.com",
+  "perfilURL": "esteeseelperfil.com"
+}
+
+
+// LOGIN USERS
+###
+POST  http://localhost:8000/api/v1/auth/login
+
+{
+  "email": "fran@gmail.com",
+  "password": "123"
+}
+
+
+// DELETE USER BY ID
+###
+DELETE  http://localhost:8000/api/v1/users/4
+
+
+// UPDATE USER BY ID
+###
+PUT http://localhost:8000/api/v1/users/:userId
+{
+  "userId":"1",
+   "name": "xxxxxxx",
+   "password": "123456",
+  "email": "xxxxxx@gmail.com"
+}
+
+// GET ALL USERS
+###
+GET  http://localhost:8000/api/v1/users
+content-type: application/json
+
+
+
+// GET USER BY ID
+###
+GET http://localhost:8000/api/v1/users/1
