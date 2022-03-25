@@ -2,7 +2,7 @@
   "name": "fashionlike-idea1-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "standard --fix",
     "dev": "NODE_ENV=development nodemon ./src/index.js --exec babel-node",
@@ -12,7 +12,8 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./src -s",
     "build": "npm run clean && npm run build-babel",
-    "start": "NODE_ENV=production npm run build && node ./build/index.js"
+    "heroku-postbuild": "npm install && npm run build",
+    "start": "NODE_ENV=production node ./build/index.js"
   },
   "keywords": [],
   "author": "",
