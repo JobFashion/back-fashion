@@ -21,6 +21,7 @@ const login = async (req, res, next) => {
   }
 }
 
+// TODO: check all validation external, and added async handleErrors
 const register = async (req, res, next) => {
   // const { name, email, perfilURL } = req.body
   const { name, email, perfilURL, surname, birthDate, password } = req.body
@@ -54,7 +55,6 @@ const register = async (req, res, next) => {
     res.status(201).json(user)
   } catch (error) {
     next(error)
-    // console.log(error.message)
   }
 }
 
