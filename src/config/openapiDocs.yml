@@ -1,0 +1,252 @@
+openapi: '3.0.2'
+info:
+  title: API Fashion
+  description: 'A continuación, encontrarás una lista actual de los métodos disponibles en nuestra API sobre autenticacion, usuarios, posts, etc.'
+  version: '1.0'
+servers:
+  - url: https://api-jobfashion.herokuapp.com/api/v1
+    description: Produccion
+  - url: http://localhost:5454/api/v1
+    description: Desarrollo
+
+#Lista de Componentes
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        birthDay:
+          type: string
+          format: date
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - surname
+      example:
+        name: Fulanito
+        surname: Front
+        email: fulanito2@gmail.com
+        password: '123456'
+        birthDay: '1992-10-02'
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+  responses:
+    NotFound:
+      description: No se encontró el recurso especificado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: No autorizado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Error en el Servidor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+# Lista de Rutas
+paths:
+  # Auth
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: 'inicio de sesion'
+      description: 'Comprueba las credenciales del usuario para iniciar sesion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: 'fulanito2@gmail.com'
+              password: '123456'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                  token:
+                    type: string
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: registro de usuario
+      description: Guardar los datos de un nuevo usuario en la base de datos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Creado Exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Errores encontrados | campos vacios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+  # Users
+  /users:
+    get:
+      tags: [Users]
+      summary: 'lista de usuarios'
+      description: 'Obtiene una lista de todos los usuarios en la bd'
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{email}:
+    get:
+      tags: [Users]
+      summary: obtener usuario
+      description: 'Obtiene los datos de un usuario en especifico'
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+          example: fulanito2@gmail.com
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    put:
+      tags: [Users]
+      summary: actualizar datos usuario
+      description: 'Guarda cambios en los datos de un usuario en especifico'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador unico de usuario
+          schema:
+            type: string
+          example: 623de0d6fb7c6abe2d722fb5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Actualizado'
+                  user:
+                    type: object
+        '403':
+          description: 'No authorizado para realizar esta accion'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  status:
+                    type: integer
+                  error:
+                    type: string
+                  message:
+                    type: string
+
+  /users/{ide}:
+    delete:
+      tags: [Users]
+      summary: eliminar usuario
+      description: 'Elimina todos los datos de un usuario en especifico'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ide
+          in: path
+          required: true
+          description: Identificador unico de usuario
+          schema:
+            type: string
+          example: 623de0d6fb7c6abe2d322fb5
+      responses:
+        '200':
+          description: OK Muestra los datos del usuario eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+        '400': # 404
+          $ref: '#/components/responses/NotFound'
+        '403': # or 401
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
