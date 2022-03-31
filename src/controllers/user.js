@@ -33,9 +33,8 @@ const updateUserById = async (req, res, next) => {
   try {
     const { id } = req.params
     const data = req.body
-    // TODO: `data` guarda todo lo que enviemos, arreglar con `save()` o creando un nuevo objeto
-
-    const user = await User.findByIdAndUpdate(id, data, {
+    const { password, ...dataFiltered } = data
+    const user = await User.findByIdAndUpdate(id, dataFiltered, {
       runValidators: true,
       new: true
     })
