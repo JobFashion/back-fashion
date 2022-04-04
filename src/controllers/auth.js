@@ -1,53 +1,93 @@
 import { User } from '../models/user'
-import validEmail from '../utils'
 import { createToken } from '../utils/jwt'
 import asyncHandler from 'express-async-handler'
+import { AppError } from '../utils/AppError'
+import { check } from 'express-validator'
 
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
 
-  const user = await User.findOne({ email })
-  if (!user) throw new Error('Email or Password incorrect')
+  const user = await User.findOne({ email }).select('+password')
+  if (!user) throw new AppError('Email o Contraseña son incorrectos', 400)
 
   const equalPass = await user.comparePassword(password)
-  if (!equalPass) throw new Error('Email or Password incorrect')
+  if (!equalPass) throw new AppError('Email o Contraseña son incorrectos', 400)
 
   // token jwt or passport dependencie
   const token = await createToken(user)
-
+  user.password = ''
   res.status(200).json({ user, token })
 })
 
-// TODO: check all validation external
 const register = asyncHandler(async (req, res, next) => {
-  const { name, email, perfilURL, surname, birthDate, password } = req.body
-
-  const isValidEmail = validEmail(email)
-  if (
-    !name ||
-    !email ||
-    !perfilURL ||
-    !isValidEmail ||
-    !surname ||
-    !birthDate
-  ) {
-    throw new Error('Missing fields')
-  }
+  const { name, email, surname, birthDate, password } = req.body
 
   const userExist = await User.findOne({ email })
-  if (userExist) throw new Error('User already exists') // 401
+  if (userExist) throw new AppError('El Usuario ya existe', 400)
 
   const user = new User({
     name,
     email,
-    perfilURL,
     surname,
     birthDate,
     password
   })
   await user.save()
-
-  res.status(201).json({ msg: 'Registered Successfully', user })
+  res.status(201).json({ message: 'Tu registro ha sido exitoso', user })
 })
 
-export { login, register }
+// Validations all routes auth
+const validate = (method) => {
+  switch (method) {
+    case 'registerUser': {
+      return [
+        check('name')
+          .exists()
+          .withMessage('El Nombre es necesario')
+          .bail()
+          .isAlpha('en-US', { ignore: ' ' })
+          .withMessage(
+            'El Nombre no debe contener caracteres especiales o alfanuméricos'
+          ),
+        check('surname')
+          .exists()
+          .withMessage('El Apellido es necesario')
+          .bail()
+          .isAlpha('en-US', { ignore: ' ' })
+          .withMessage(
+            'El Apellido no debe contener caracteres especiales o alfanuméricos'
+          ),
+        check('email')
+          .exists()
+          .withMessage('El Email es necesario')
+          .bail()
+          .isEmail()
+          .withMessage('El Email es invalido'),
+        check('password')
+          .exists()
+          .withMessage('El Password es necesario')
+          .bail()
+          .isLength({ min: 6 })
+          .withMessage('El Password debe contener un minimo de 6 caracteres'),
+        check('birthDate')
+          .exists()
+          .withMessage('Este campo es obligatorio para el registro')
+          .bail()
+          .isDate()
+          .withMessage(
+            'La Fecha debe estar en un formato correcto, ex: 1991-10-23'
+          )
+      ]
+    }
+    case 'loginUser': {
+      return [
+        check('email', 'El Email no es Valido').exists().bail().isEmail(),
+        check('password', 'La Contraseña no es Valida').exists()
+      ]
+    }
+    default:
+      return []
+  }
+}
+
+export { login, register, validate }
