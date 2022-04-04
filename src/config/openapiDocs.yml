@@ -24,7 +24,7 @@ components:
           type: string
         surname:
           type: string
-        birthDay:
+        birthDate:
           type: string
           format: date
         email:
@@ -34,19 +34,26 @@ components:
       required:
         - name
         - surname
+        - birthDate
+        - email
+        - password
       example:
         name: Fulanito
         surname: Front
-        email: fulanito2@gmail.com
+        birthDate: '1992-10-02'
+        email: fulanito5@gmail.com
         password: '123456'
-        birthDay: '1992-10-02'
     Error:
       type: object
       properties:
+        name:
+          type: string
         status:
           type: integer
         message:
           type: string
+        errors:
+          type: array
   responses:
     NotFound:
       description: No se encontró el recurso especificado
@@ -120,17 +127,13 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/User'
-        '500':
-          description: Errores encontrados | campos vacios
+        '400':
+          description: Errores encontrados | campos vacios | Similar
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  status:
-                    type: integer
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
   # Users
   /users:
     get:
