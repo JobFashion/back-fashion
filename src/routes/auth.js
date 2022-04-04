@@ -1,11 +1,20 @@
 import { Router } from 'express'
 
-import {login, register} from '../controllers/auth'
+import { validateReq } from '../middleware/validateReq'
+import {login, register, validate} from '../controllers/auth'
 
 const router = Router()
 
-// -> auth
-router.post('/login',login)
-router.post('/register',register)
+router.post(
+  '/login',
+  validateReq(validate('loginUser')),
+  login
+)
+
+router.post(
+  '/register',
+  validateReq(validate('registerUser')),
+  register
+)
 
 export default router
