@@ -7,7 +7,7 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     surname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
     birthDate: { type: Date, required: true },
     perfilURL: { type: String, required: false }
     // verificationToken: {type: String, default: () => crypto.randomBytes(24).toString('hex')}
