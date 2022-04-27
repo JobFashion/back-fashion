@@ -1,10 +1,10 @@
-import { Router } from 'express'
+const { Router } = require('express')
 
 // controllers
-import * as userController from '../controllers/user'
+const userController = require('../controllers/user')
 // middlewares
-import { validJWT } from '../middleware/validJWT'
-import { validID } from '../middleware/validID'
+const { validJWT } = require('../middleware/validJWT')
+const { validID } = require('../middleware/validID')
 
 const router = Router()
 
@@ -14,4 +14,4 @@ router.get('/:email', userController.getUserByEmail)
 router.put('/:id', validJWT, validID, userController.updateUserById)
 router.delete('/:id', validJWT, validID, userController.deleteUserById)
 
-export default router
+module.exports = router

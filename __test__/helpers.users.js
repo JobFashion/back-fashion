@@ -1,9 +1,9 @@
-import supertest from 'supertest'
-import { app } from '../index'
+const supertest = require('supertest')
+const { app } = require('../index')
 
-export const api = supertest(app)
+module.exports.api = supertest(app)
 
-export const initialUser = [
+module.exports.initialUser = [
   {
     name: 'Pedro',
     email: 'Pedor@gmail.com',

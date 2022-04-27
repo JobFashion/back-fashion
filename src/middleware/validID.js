@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
-export const validID = (req, res, next) => {
+module.exports.validID = (req, res, next) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).json({
       status: 400,

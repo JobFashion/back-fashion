@@ -1,8 +1,8 @@
-import { User } from '../models/user'
-import { createToken } from '../utils/jwt'
-import asyncHandler from 'express-async-handler'
-import { AppError } from '../utils/AppError'
-import { check } from 'express-validator'
+const { User } = require('../models/user')
+const { createToken } = require('../utils/jwt')
+const asyncHandler = require('express-async-handler')
+const { AppError } = require('../utils/AppError')
+const { check } = require('express-validator')
 
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
@@ -90,4 +90,4 @@ const validate = (method) => {
   }
 }
 
-export { login, register, validate }
+module.exports = { login, register, validate }

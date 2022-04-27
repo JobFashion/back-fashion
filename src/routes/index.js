@@ -1,7 +1,7 @@
-import { Router } from 'express'
+const { Router } = require('express')
 
-import authRoute from './auth'
-import userRoute from './user'
+const authRoute = require('./auth')
+const userRoute = require('./user')
 
 const router = Router()
 
@@ -14,4 +14,4 @@ defaultRoutes.forEach(({ path, route }) => {
   router.use(path, route)
 })
 
-export default router
+module.exports = router

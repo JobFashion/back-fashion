@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = process.env
 
 function createToken({ id, email }, expiresIn = 60 * 60) {
@@ -48,4 +48,4 @@ function verifyToken(token) {
   })
 }
 
-export { createToken, verifyToken }
+module.exports = { createToken, verifyToken }

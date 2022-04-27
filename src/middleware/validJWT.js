@@ -1,6 +1,6 @@
 const { verifyToken } = require('../utils/jwt')
 
-export const validJWT = async (req, res, next) => {
+module.exports.validJWT = async (req, res, next) => {
   try {
     const auth = req.headers.authorization
     const token = auth?.replace('Bearer ', '')

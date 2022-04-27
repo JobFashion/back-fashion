@@ -1,5 +1,5 @@
-import { User } from '../models/user'
-import validEmail from '../utils'
+const { User } = require('../models/user')
+const validEmail = require('../utils')
 
 const getAllUsers = async (req, res, next) => {
   const allUsers = await User.find({})
@@ -58,4 +58,4 @@ const deleteUserById = async (req, res, next) => {
   }
 }
 
-export { getAllUsers, getUserByEmail, updateUserById, deleteUserById }
+module.exports = { getAllUsers, getUserByEmail, updateUserById, deleteUserById }

@@ -1,10 +1,10 @@
-import express from 'express'
-import cors from 'cors'
-import swaggerUI from 'swagger-ui-express'
-import YAML from 'yamljs'
+const express = require('express')
+const cors = require('cors')
+const swaggerUI = require('swagger-ui-express')
+const YAML = require('yamljs')
 
-import allRoutes from './routes'
-import { handleErrors } from './middleware/handleError.js'
+const allRoutes = require('./routes')
+const { handleErrors } = require('./middleware/handleError.js')
 
 const swaggerDoc = YAML.load('./src/config/openapiDocs.yml')
 const app = express()

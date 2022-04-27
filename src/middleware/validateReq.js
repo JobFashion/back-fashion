@@ -1,7 +1,7 @@
-import { validationResult } from 'express-validator'
+const { validationResult } = require('express-validator')
 
 // parallel processing
-export const validateReq = (validations) => {
+module.exports.validateReq = (validations) => {
   return async (req, res, next) => {
     await Promise.all(validations.map((validation) => validation.run(req)))
 

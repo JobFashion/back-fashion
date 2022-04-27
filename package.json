@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "standard --fix",
-    "dev": "NODE_ENV=development nodemon ./src/index.js --exec babel-node",
+    "dev": "NODE_ENV=development nodemon ./src/index.js",
+    "devBabel": "NODE_ENV=development nodemon ./src/index.js --exec babel-node",
     "co": "sui-mono commit",
     "test": "NODE_ENV=test jest --verbose --silent",
     "test:watch": "npm run test -- --watch",
