@@ -3,7 +3,7 @@ import cors from 'cors'
 import swaggerUI from 'swagger-ui-express'
 import YAML from 'yamljs'
 
-import allRoutes from './routes'
+import allRoutes from './routes/index.js'
 import { handleErrors } from './middleware/handleError.js'
 
 const swaggerDoc = YAML.load('./src/config/openapiDocs.yml')
@@ -24,4 +24,4 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc))
 app.use(handleErrors)
 
 // export default app
-module.exports = app
+export default app
