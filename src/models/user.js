@@ -1,6 +1,7 @@
-import { model, Schema } from 'mongoose'
+import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
-// import crypto from 'crypto'
+
+const { model, Schema } = mongoose
 
 const userSchema = new Schema(
   {
@@ -9,7 +10,8 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     birthDate: { type: Date, required: true },
-    perfilURL: { type: String, required: false }
+    perfilURL: { type: String, required: false },
+    role: { type: String, enum: ['user', 'manager', 'admin'], default: 'user' }
     // verificationToken: {type: String, default: () => crypto.randomBytes(24).toString('hex')}
   },
   {
