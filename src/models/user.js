@@ -1,16 +1,22 @@
-import { model, Schema } from 'mongoose'
+import mongoose from 'mongoose'
+import crypto from 'crypto'
 import bcrypt from 'bcryptjs'
-// import crypto from 'crypto'
+
+const { model, Schema, Types } = mongoose
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    surname: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    name: { type: String, trim: true, required: true },
+    surname: { type: String, trim: true, required: true },
+    email: { type: String, required: true, trim: true, unique: true },
     password: { type: String, required: true, select: false },
     birthDate: { type: Date, required: true },
-    perfilURL: { type: String, required: false }
-    // verificationToken: {type: String, default: () => crypto.randomBytes(24).toString('hex')}
+    perfilURL: { type: String, required: false },
+    role: { type: String, enum: ['user', 'manager', 'admin'], default: 'user' },
+    avatar: { type: String, required: false },
+    verificationToken: { type: String, default: () => crypto.randomBytes(24).toString('hex') },
+    following: [{ type: Types.ObjectId, ref: 'user' }]
+    // saved: [{type: mongoose.Types.ObjectId, ref: 'user'}]
   },
   {
     timestamps: true,

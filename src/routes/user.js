@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
 // controllers
-import * as userController from '../controllers/user'
+import * as userController from '../controllers/user.js'
 // middlewares
-import { validJWT } from '../middleware/validJWT'
-import { validID } from '../middleware/validID'
+import { validJWT } from '../middleware/validJWT.js'
+import { validID } from '../middleware/validID.js'
 
 const router = Router()
 

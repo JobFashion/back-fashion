@@ -1,8 +1,9 @@
-import { User } from '../models/user'
-import { createToken } from '../utils/jwt'
 import asyncHandler from 'express-async-handler'
-import { AppError } from '../utils/AppError'
 import { check } from 'express-validator'
+
+import { User } from '../models/user.js'
+import { createToken } from '../utils/jwt.js'
+import { AppError } from '../utils/AppError.js'
 
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
