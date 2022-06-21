@@ -13,6 +13,7 @@ const app = express()
 app.set('port', process.env.PORT || 8000)
 
 // middlewares
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
 
