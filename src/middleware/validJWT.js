@@ -1,10 +1,10 @@
-const { verifyToken } = require('../utils/jwt')
+import { User } from '../models/user.js'
+import { verifyToken } from '../utils/jwt.js'
 
 export const validJWT = async (req, res, next) => {
   try {
     const auth = req.headers.authorization
     const token = auth?.replace('Bearer ', '')
-    // comprobamos que hay un token antes de verificar
     if (!token) {
       return res.status(403).send({
         data: [],
@@ -13,13 +13,10 @@ export const validJWT = async (req, res, next) => {
         message: 'imposible procesar la solicitud'
       })
     }
-    // verificamos (si devuelve true continuamos)
     const store = await verifyToken(token)
-
-    if (store) {
-      req.user = store
-      next()
-    }
+    const user = await User.findOne({ _id: store.id })
+    req.user = user
+    next()
   } catch (error) {
     return res.status(401).send({
       data: [],

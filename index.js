@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import app from './app'
-import './dbConection'
+import app from './src/app.js'
+import './src/dbConection.js'
 
 // start server
 const server = app.listen(app.get('port'), () => {

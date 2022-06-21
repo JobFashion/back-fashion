@@ -1,5 +1,5 @@
-import { User } from '../models/user'
-import validEmail from '../utils'
+import { User } from '../models/user.js'
+import validEmail from '../utils/index.js'
 
 const getAllUsers = async (req, res, next) => {
   const allUsers = await User.find({})
