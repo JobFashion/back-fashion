@@ -1,3 +1,4 @@
+import { User } from '../models/user.js'
 import { verifyToken } from '../utils/jwt.js'
 
 export const validJWT = async (req, res, next) => {
@@ -13,7 +14,8 @@ export const validJWT = async (req, res, next) => {
       })
     }
     const store = await verifyToken(token)
-    req.user = store
+    const user = await User.findOne({ _id: store.id })
+    req.user = user
     next()
   } catch (error) {
     return res.status(401).send({
